@@ -1,0 +1,146 @@
+/* Estilos para src/app/auth/pages/login/login.component.css */
+/* y src/app/auth/pages/register/register.component.css */
+
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 150px); /* Ajusta según la altura de tu header/footer */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.login-container,
+.register-container {
+  background-color: #ffffff;
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 450px; /* Ancho máximo del formulario */
+  text-align: center;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 25px;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left; /* Alinea labels a la izquierda */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
+  border-color: #007bff; /* Color primario de tu app */
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+/* Estilos para campos inválidos */
+.form-group input.is-invalid {
+  border-color: #dc3545; /* Rojo para errores */
+}
+
+.form-group input.is-invalid:focus {
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.invalid-feedback {
+  display: block; /* Asegura que se muestre */
+  color: #dc3545;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+button[type="submit"] {
+  background-color: #007bff; /* Color primario */
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  margin-top: 10px; /* Espacio antes del botón */
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3; /* Un azul más oscuro */
+}
+
+button[type="submit"]:active {
+  transform: translateY(1px);
+}
+
+button[type="submit"]:disabled {
+  background-color: #6c757d; /* Gris cuando está deshabilitado */
+  cursor: not-allowed;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+
+.success-message { 
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+
+p {
+  margin-top: 25px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+p a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+p a:hover {
+  text-decoration: underline;
+}
+
+
+button[type="submit"].is-loading {
+  /* Podrías añadir un spinner aquí o simplemente cambiar el texto */
+}

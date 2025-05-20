@@ -1,0 +1,22 @@
+<header class="app-header">
+  <nav>
+    <div style="display: flex; align-items: center;">
+      <img src="../assets/emqu_tecnologies_sa_de_cv_logo.jpeg" alt="EMQU Logo" class="logo">
+      <h1>Sistema de Gestión de Solicitudes</h1>
+    </div>
+    <ul>
+      <li><a routerLink="/dashboard">Dashboard</a></li>
+      <li><a routerLink="/solicitudes">Solicitudes</a></li>
+      <li><a routerLink="/perfil">Perfil</a></li>
+      <li><a routerLink="/logout">Cerrar Sesión</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="app-main">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="app-footer">
+  <p>&copy; {{currentYear}} EMQU. Todos los derechos reservados.</p>
+  </footer>

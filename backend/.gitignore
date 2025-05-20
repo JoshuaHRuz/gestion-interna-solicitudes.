@@ -1,0 +1,29 @@
+# Gradle files
+.gradle/
+build/
+
+# Maven files
+target/
+
+# Compiled class files
+*.class
+
+# Log files
+*.log
+logs/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# misc
+.DS_Store
+
+# Spring Boot Devtools
+.spring-boot-devtools.properties
+
+# AOT
+-spring-aot/

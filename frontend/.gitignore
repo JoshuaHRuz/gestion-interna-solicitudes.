@@ -1,0 +1,27 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/dist
+/tmp
+/out-tsc
+
+# build artifacts
+.angular/cache
+.angular/analytics
+.next
+
+# misc
+.sass-cache
+/npm-debug.log
+/yarn-error.log
+/yarn-debug.log
+.DS_Store
+.idea/
+.vscode/
+my-app/

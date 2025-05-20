@@ -1,0 +1,51 @@
+<div class="mis-solicitudes-container">
+  <h1>Mis Solicitudes</h1>
+
+  <div class="header-actions">
+    <button class="btn btn-primary" routerLink="/solicitudes/crear">
+      Nueva Solicitud
+    </button>
+  </div>
+
+  <div *ngIf="solicitudes.length > 0; else noSolicitudes" class="solicitudes-table-wrapper">
+    <table class="solicitudes-table">
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Asunto</th>
+          <th>Fecha de Creación</th>
+          <th>Fecha Máxima</th>
+          <th>Estado</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let solicitud of solicitudes">
+          <td>{{ solicitud.tipo }}</td>
+          <td>{{ solicitud.asunto }}</td>
+          <td>{{ solicitud.fechaCreacion | date:'shortDate' }}</td>
+          <td>{{ solicitud.fechaMaxima ? (solicitud.fechaMaxima | date:'shortDate') : 'N/A' }}</td>
+          <td>
+            <span [ngClass]="{
+                'estado-pendiente': solicitud.estado === 'Pendiente',
+                'estado-aprobada': solicitud.estado === 'Aprobada',
+                'estado-rechazada': solicitud.estado === 'Rechazada',
+                'estado-devuelta': solicitud.estado === 'Devuelta'
+              }">
+              {{ solicitud.estado }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-secondary btn-sm" (click)="verDetalle(solicitud.id)">
+              Ver detalle
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noSolicitudes>
+    <p class="no-solicitudes-message">No tienes solicitudes registradas.</p>
+  </ng-template>
+</div>

@@ -8,7 +8,11 @@
       <li><a routerLink="/">Dashboard</a></li>
       <li><a routerLink="/solicitudes">Solicitudes</a></li>
       <li><a routerLink="/perfil">Perfil</a></li>
-
+      
+      <li *ngIf="authService.isAuthenticated() && isSupervisorOrAdminWithDepartment()">
+        <a routerLink="/supervisor">Gestión Supervisor</a>
+      </li>
+      
       <li *ngIf="currentUser">
         <a (click)="logout()" style="cursor: pointer;">Cerrar Sesión</a>
       </li>

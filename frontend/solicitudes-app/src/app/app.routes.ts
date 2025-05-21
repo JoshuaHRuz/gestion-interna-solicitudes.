@@ -25,11 +25,22 @@ export const routes: Routes = [
     data: { roles: ['EMPLEADO', 'SUPERVISOR', 'ADMINISTRADOR'] as UserRole[] } // Todos pueden acceder a SUS solicitudes
   },
 /*   {
-    path: 'supervisor', // <-- NUEVA RUTA PARA SUPERVISORES
-    //loadChildren: () => import('./supervisor/supervisor.routes').then(r => r.SUPERVISOR_ROUTES),
-    canActivate: [roleGuard], // Protejo con el guard de roles
-    data: { roles: ['SUPERVISOR', 'ADMINISTRADOR'] as UserRole[] } // Solo supervisores y admins
+    path: 'perfil',
+    loadComponent: () => import('./profile/profile.component').then(c => c.ProfileComponent),
+    canActivate: [roleGuard]
   }, */
+  {
+    path: 'supervisor', // NUEVA RUTA PARA EL SUPERVISOR
+    loadComponent: () => import('./supervisor/supervisor-dashboard/supervisor-dashboard.component').then(c => c.SupervisorDashboardComponent),
+    canActivate: [authGuard], // Asegura que solo usuarios autenticados puedan acceder
+    data: { roles: ['SUPERVISOR', 'ADMINISTRADOR'] } // Opcional: Para una guardia de roles más avanzada
+  },
+  {
+    path: 'supervisor/solicitud/:id', // MODIFICACIÓN 4: Nueva ruta para el detalle de la solicitud
+    loadComponent: () => import('./supervisor/request-detail/request-detail.component').then(c => c.RequestDetailComponent),
+    canActivate: [authGuard],
+    data: { roles: ['SUPERVISOR', 'ADMINISTRADOR'] } // Solo supervisores/admins pueden ver el detalle
+  },
   // {
   //   path: 'admin', // <-- FUTURA RUTA PARA ADMINISTRADORES
   //   loadChildren: () => import('./admin/admin.routes').then(r => r.ADMIN_ROUTES),

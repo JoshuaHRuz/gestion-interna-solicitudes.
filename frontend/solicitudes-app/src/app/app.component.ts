@@ -28,7 +28,10 @@ export class AppComponent implements OnInit {
       this.currentUser = user;
     });
   }
-
+  isSupervisorOrAdminWithDepartment(): boolean {
+    const user = this.authService.getCurrentUser();
+    return (user && (user.role === 'SUPERVISOR' || user.role === 'ADMINISTRADOR') && !!user.department ? true : false);
+  }
   // Método para manejar el logout (ya lo tenías en tu AuthService)
   logout(): void { // Renombro a logout para que coincida con tu HTML
     this.authService.logout();

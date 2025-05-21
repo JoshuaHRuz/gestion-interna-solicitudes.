@@ -1,0 +1,83 @@
+.detail-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.mat-mdc-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.close-button {
+  margin-left: auto; /* Empuja el botón de cerrar a la derecha */
+}
+
+.request-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap; /* Permite que los campos se ajusten en pantallas pequeñas */
+}
+
+.form-row mat-form-field {
+  flex: 1 1 calc(50% - 10px); /* Dos campos por fila, con espacio */
+  min-width: 200px; /* Ancho mínimo para campos */
+}
+
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap; /* Para que los botones se ajusten */
+}
+
+.delete-button {
+  margin-left: auto; /* Si quieres el botón de eliminar más a la izquierda en la fila de acciones */
+}
+
+.history-card {
+  margin-top: 30px;
+}
+
+.history-entry {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.history-entry:last-child {
+  border-bottom: none;
+}
+
+.history-action {
+  font-weight: 500;
+}
+
+.history-details span {
+  margin-right: 15px;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.history-extra-details {
+  font-size: 0.85em;
+  color: #777;
+  margin-top: 4px;
+  white-space: pre-wrap; /* Para que los detalles largos se ajusten bien */
+}
+
+/* Estilos para los snackbars (ya no aquí, movidos a global) */
+
+

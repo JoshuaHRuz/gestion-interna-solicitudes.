@@ -5,13 +5,18 @@
       <h1>Sistema de Gestión de Solicitudes</h1>
     </div>
     <ul>
-      <li><a routerLink="/dashboard">Dashboard</a></li>
+      <li><a routerLink="/">Dashboard</a></li>
       <li><a routerLink="/solicitudes">Solicitudes</a></li>
       <li><a routerLink="/perfil">Perfil</a></li>
-      <li *ngIf="authService.currentUser()"> <span>Hola, {{ authService.currentUser()?.username }}</span>
+      
+      <li *ngIf="authService.isAuthenticated() && isSupervisorOrAdminWithDepartment()">
+        <a routerLink="/supervisor">Gestión Supervisor</a>
+      </li>
+      
+      <li *ngIf="currentUser">
         <a (click)="logout()" style="cursor: pointer;">Cerrar Sesión</a>
       </li>
-      <li *ngIf="!authService.currentUser()">
+      <li *ngIf="!currentUser">
         <a routerLink="/login" routerLinkActive="active-link">Iniciar Sesión</a>
       </li>
     </ul>
@@ -24,4 +29,4 @@
 
 <footer class="app-footer">
   <p>&copy; {{currentYear}} EMQU. Todos los derechos reservados.</p>
-  </footer>
+</footer>

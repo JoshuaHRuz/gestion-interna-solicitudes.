@@ -66,3 +66,68 @@ body {
   padding: 1rem;
   font-size: 0.9rem;
 }
+
+/* Estilos para app.component.css */
+mat-toolbar {
+  background-color: var(--primary-color);
+  color: white; /* Aseguramos que el texto sea legible sobre el fondo primario */
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar a.active-link {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+/* Ajustamos el color de los botones de la toolbar para que contrasten si es necesario */
+mat-toolbar a[mat-button],
+mat-toolbar button[mat-button] {
+  color: white; /* O el color que contraste mejor con --primary-color */
+}
+
+.user-menu-button {
+  text-transform: none; /* Para que el nombre de usuario no esté en mayúsculas */
+  color: white; /* Asegurar que el texto del botón de menú sea legible */
+}
+
+.user-menu-button mat-icon {
+  margin-right: 5px;
+  color: white; /* Asegurar que los iconos en el botón de menú sean legibles */
+}
+
+.user-menu-button mat-icon:last-of-type {
+  margin-left: 5px;
+  margin-right: 0;
+}
+
+.content-container {
+  padding: 20px;
+  min-height: calc(100vh - 128px); /* Altura de toolbar (64px) + footer (64px) aproximado */
+  /* Ajusta el padding y min-height según tus necesidades */
+}
+
+.footer {
+  background-color: #f5f5f5;
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #e0e0e0;
+  /* position: fixed; */ /* Descomentar si quieres un footer fijo abajo */
+  /* bottom: 0; */
+  /* width: 100%; */
+}
+
+/* Si tenías una clase .logo, la mantenemos por si la reutilizas con mat-toolbar */
+.logo {
+  height: 40px; /* Ajusta según el tamaño de tu logo */
+  margin-right: 10px;
+  vertical-align: middle; /* Alinea bien con el texto del toolbar */
+}
+
+/* Puedes ajustar el título si es necesario */
+mat-toolbar span:first-child {
+  font-weight: bold;
+  /* color: white;  Si el color global de mat-toolbar no es suficiente */
+}

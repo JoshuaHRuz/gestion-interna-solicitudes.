@@ -12,3 +12,22 @@ html, body {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Estilos Globales para SnackBar */
+.success-snackbar {
+  background-color: #4CAF50; /* Verde */
+  color: white;
+}
+
+.success-snackbar .mat-mdc-button.mat-mdc-snack-bar-action {
+  color: white;
+}
+
+.error-snackbar {
+  background-color: #F44336; /* Rojo */
+  color: white;
+}
+
+.error-snackbar .mat-mdc-button.mat-mdc-snack-bar-action {
+  color: white;
+}

@@ -1,0 +1,139 @@
+<div class="detail-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ isEditMode ? 'Editar Solicitud' : 'Crear Nueva Solicitud' }}</mat-card-title>
+      <button mat-icon-button (click)="navigateBack()" class="close-button" matTooltip="Volver al Dashboard">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="requestForm" (ngSubmit)="saveRequest()" class="request-form">
+        <!-- Título -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Título de la Solicitud</mat-label>
+          <input matInput formControlName="title" required>
+          <mat-error *ngIf="requestForm.get('title')?.hasError('required')">
+            El título es obligatorio.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Descripción -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descripción Detallada</mat-label>
+          <textarea matInput formControlName="description" rows="4" required></textarea>
+          <mat-error *ngIf="requestForm.get('description')?.hasError('required')">
+            La descripción es obligatoria.
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-row">
+          <!-- Departamento -->
+          <mat-form-field appearance="outline">
+            <mat-label>Departamento</mat-label>
+            <mat-select formControlName="department" required>
+              <mat-option *ngFor="let dept of departments" [value]="dept">{{ dept }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="requestForm.get('department')?.hasError('required')">
+              El departamento es obligatorio.
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Estado -->
+          <mat-form-field appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="status" required>
+              <mat-option *ngFor="let stat of statuses" [value]="stat">{{ stat }}</mat-option>
+            </mat-select>
+             <mat-error *ngIf="requestForm.get('status')?.hasError('required')">
+              El estado es obligatorio.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <!-- Prioridad -->
+          <mat-form-field appearance="outline">
+            <mat-label>Prioridad</mat-label>
+            <mat-select formControlName="priority" required>
+              <mat-option *ngFor="let prio of priorities" [value]="prio">{{ prio }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="requestForm.get('priority')?.hasError('required')">
+              La prioridad es obligatoria.
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Solicitante ID -->
+          <mat-form-field appearance="outline">
+            <mat-label>ID del Solicitante</mat-label>
+            <mat-select formControlName="requesterId" required>
+                <mat-option *ngFor="let user of simulatedUsers" [value]="user.id">{{ user.displayName }}</mat-option>
+            </mat-select>
+            <!-- <input matInput formControlName="requesterId" required> -->
+            <mat-error *ngIf="requestForm.get('requesterId')?.hasError('required')">
+              El ID del solicitante es obligatorio.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Asignado A (Opcional) -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Asignado A (ID de Usuario, opcional)</mat-label>
+          <mat-select formControlName="assignedTo">
+            <mat-option value="">Nadie</mat-option> <!-- Opción para desasignar -->
+            <mat-option *ngFor="let user of simulatedUsers" [value]="user.id">{{ user.displayName }}</mat-option>
+          </mat-select>
+          <!-- <input matInput formControlName="assignedTo"> -->
+        </mat-form-field>
+
+        <!-- Comentarios del Administrador -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Comentarios Adicionales (Admin)</mat-label>
+          <textarea matInput formControlName="comments" rows="3"></textarea>
+        </mat-form-field>
+
+        <!-- Acciones del Formulario -->
+        <div class="form-actions">
+          <button mat-stroked-button type="button" (click)="navigateBack()" matTooltip="Cancelar y volver">
+            Cancelar
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="requestForm.invalid">
+            <mat-icon>{{ isEditMode ? 'save' : 'add_circle_outline' }}</mat-icon>
+            {{ isEditMode ? 'Guardar Cambios' : 'Crear Solicitud' }}
+          </button>
+          <button *ngIf="isEditMode" mat-raised-button color="warn" type="button" (click)="deleteRequest()" class="delete-button" matTooltip="Eliminar Solicitud">
+            <mat-icon>delete_forever</mat-icon>
+            Eliminar
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Sección de Historial (Solo en modo edición) -->
+  <mat-card *ngIf="isEditMode && (requestHistory$ | async) as history" class="history-card">
+    <mat-card-header>
+      <mat-card-title>Historial de la Solicitud</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div *ngIf="history.length > 0; else noHistory">
+        <mat-list>
+          <mat-list-item *ngFor="let entry of history" class="history-entry">
+            <mat-icon matListItemIcon>history</mat-icon>
+            <div matListItemTitle class="history-action">{{entry.action}}</div>
+            <div matListItemLine class="history-details">
+              <span>Por: {{entry.byUser}}</span>
+              <span>Fecha: {{entry.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</span>
+            </div>
+            <div matListItemLine *ngIf="entry.details" class="history-extra-details">
+              <em>Detalles: {{entry.details}}</em>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+      <ng-template #noHistory>
+        <p>No hay entradas de historial para esta solicitud.</p>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+</div>

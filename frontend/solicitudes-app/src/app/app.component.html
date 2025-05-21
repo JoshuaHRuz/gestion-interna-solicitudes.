@@ -1,32 +1,58 @@
-<header class="app-header">
-  <nav>
-    <div style="display: flex; align-items: center;">
-      <img src="../assets/emqu_tecnologies_sa_de_cv_logo.jpeg" alt="EMQU Logo" class="logo">
-      <h1>Sistema de Gestión de Solicitudes</h1>
-    </div>
-    <ul>
-      <li><a routerLink="/">Dashboard</a></li>
-      <li><a routerLink="/solicitudes">Solicitudes</a></li>
-      <li><a routerLink="/perfil">Perfil</a></li>
-      
-      <li *ngIf="authService.isAuthenticated() && isSupervisorOrAdminWithDepartment()">
-        <a routerLink="/supervisor">Gestión Supervisor</a>
-      </li>
-      
-      <li *ngIf="currentUser">
-        <a (click)="logout()" style="cursor: pointer;">Cerrar Sesión</a>
-      </li>
-      <li *ngIf="!currentUser">
-        <a routerLink="/login" routerLinkActive="active-link">Iniciar Sesión</a>
-      </li>
-    </ul>
-  </nav>
-</header>
+<mat-toolbar color="primary">
+  <img src="../assets/emqu_tecnologies_sa_de_cv_logo.jpeg" alt="EMQU Logo" class="logo" style="border-radius: 50%;">
+  <span>Gestión de Solicitudes</span>
 
-<main class="app-main">
+  <div class="spacer"></div>
+
+  <!-- Enlaces para Empleado -->
+  <ng-container *ngIf="isLoggedIn && isEmpleado">
+    <a mat-button routerLink="/solicitudes" routerLinkActive="active-link">Mis Solicitudes</a>
+  </ng-container>
+
+  <!-- Enlaces para Supervisor -->
+  <ng-container *ngIf="isLoggedIn && isSupervisor">
+    <a mat-button routerLink="/solicitudes" routerLinkActive="active-link">Solicitudes (Todas)</a>
+    <a mat-button routerLink="/supervisor" routerLinkActive="active-link">Gestión Supervisor</a>
+  </ng-container>
+
+  <!-- Enlaces para Administrador -->
+  <ng-container *ngIf="isLoggedIn && isAdmin">
+    <a mat-button routerLink="/admin" routerLinkActive="active-link">Panel Admin</a>
+    <a mat-button routerLink="/solicitudes" routerLinkActive="active-link">Solicitudes (Todas)</a>
+  </ng-container>
+
+  <!-- Saludo y Menú de Usuario -->
+  <ng-container *ngIf="isLoggedIn">
+    <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
+      <mat-icon>account_circle</mat-icon>
+      Hola, {{ userName }}
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item routerLink="/perfil">
+        <mat-icon>person</mat-icon>
+        <span>Perfil</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Cerrar Sesión</span>
+      </button>
+    </mat-menu>
+  </ng-container>
+
+  <!-- Enlaces para No Autenticados -->
+  <ng-container *ngIf="!isLoggedIn">
+    <a mat-button routerLink="/login" routerLinkActive="active-link">Iniciar Sesión</a>
+    <a mat-button routerLink="/register" routerLinkActive="active-link">Registrar</a>
+  </ng-container>
+
+</mat-toolbar>
+
+<div class="content-container">
   <router-outlet></router-outlet>
-</main>
+</div>
 
-<footer class="app-footer">
-  <p>&copy; {{currentYear}} EMQU. Todos los derechos reservados.</p>
+<footer class="footer">
+  <p>&copy; {{ currentYear }} Mi Aplicación de Solicitudes. Todos los derechos reservados.</p>
+  <!-- Puedes añadir más contenido al footer aquí -->
 </footer>

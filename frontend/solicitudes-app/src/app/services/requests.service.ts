@@ -150,12 +150,25 @@ updateRequestStatus(id: string, newStatus: Request['status'], comments?: string,
   private getEditDifferences(oldReq: Request, newReq: Request): string {
     let diffs: string[] = [];
     if (oldReq.title !== newReq.title) diffs.push(`Título: '${oldReq.title}' -> '${newReq.title}'`);
-    if (oldReq.description !== newReq.description) diffs.push(`Descripción cambiada`);
+    if (oldReq.description !== newReq.description) diffs.push(`Descripción: '${oldReq.description}' -> '${newReq.description}'`);
     if (oldReq.department !== newReq.department) diffs.push(`Departamento: '${oldReq.department}' -> '${newReq.department}'`);
     if (oldReq.status !== newReq.status) diffs.push(`Estado: '${oldReq.status}' -> '${newReq.status}'`);
     if (oldReq.priority !== newReq.priority) diffs.push(`Prioridad: '${oldReq.priority}' -> '${newReq.priority}'`);
-    if (oldReq.requesterId !== newReq.requesterId) diffs.push(`Solicitante: '${oldReq.requesterId}' -> '${newReq.requesterId}'`);
+    if (oldReq.requesterId !== newReq.requesterId) diffs.push(`Solicitante ID: '${oldReq.requesterId}' -> '${newReq.requesterId}'`);
+    if (oldReq.assignedTo !== newReq.assignedTo) diffs.push(`Asignado a: '${oldReq.assignedTo || 'Nadie'}' -> '${newReq.assignedTo || 'Nadie'}'`);
+    if (oldReq.comments !== newReq.comments) diffs.push(`Comentarios: '${oldReq.comments || 'Vacío'}' -> '${newReq.comments || 'Vacío'}'`);
     // Puedes añadir más comparaciones para otros campos
-    return diffs.length > 0 ? diffs.join('; ') : 'No se detectaron cambios significativos.';
+    return diffs.length > 0 ? diffs.join('; ') : 'No se detectaron cambios significativos en campos principales.';
+  }
+
+  // NUEVO: Método para obtener el historial de una solicitud
+  getRequestHistory(requestId: string): Observable<RequestHistoryEntry[] | undefined> {
+    const request = this.requests.find(req => req.id === requestId);
+    if (request && request.history) {
+      return of(request.history).pipe(delay(200));
+    } else if (request && !request.history) {
+      return of([]).pipe(delay(200)); // Si existe la solicitud pero no tiene historial
+    }
+    return of(undefined).pipe(delay(200)); // Si la solicitud no se encuentra
   }
 }

@@ -1,0 +1,116 @@
+<mat-card class="supervisor-dashboard-card">
+  <mat-card-header>
+    <mat-card-title>Panel de Supervisor</mat-card-title>
+    <mat-card-subtitle *ngIf="department">Solicitudes de {{ department }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="currentUser?.role === 'SUPERVISOR' && department; else noSupervisorAccess">
+      <mat-form-field  class="full-width-input">
+        <mat-label>Filtrar solicitudes</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ej. impresora" #input>
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Título </th>
+            <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="department">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Departamento </th>
+            <td mat-cell *matCellDef="let element"> {{element.department}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+            <td mat-cell *matCellDef="let element">
+              <span [ngClass]="{
+                'status-pendiente': element.status === 'Pendiente',
+                'status-en-proceso': element.status === 'En Proceso',
+                'status-aprobada': element.status === 'Aprobada',
+                'status-rechazada': element.status === 'Rechazada',
+                'status-devuelta': element.status === 'Devuelta',
+                'status-completada': element.status === 'Completada'
+              }">
+                {{element.status}}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioridad </th>
+            <td mat-cell *matCellDef="let element"> {{element.priority}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="requesterId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Solicitante </th>
+            <td mat-cell *matCellDef="let element"> {{element.requesterId}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Creada </th>
+            <td mat-cell *matCellDef="let element"> {{element.createdAt | date:'short'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Acciones </th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button color="primary" [routerLink]="['/supervisor/solicitud', element.id]" matTooltip="Ver detalles">
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="8">No hay datos que coincidan con el filtro "{{input.value}}"</td>
+          </tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+
+    <ng-template #noSupervisorAccess>
+      <mat-card-content>
+        <p>Acceso denegado. Solo los usuarios supervisores con un departamento asignado pueden ver este panel.</p>
+        <p>Por favor, asegúrate de haber iniciado sesión como "supervisor admin.com".</p>
+      </mat-card-content>
+    </ng-template>
+  </mat-card-content>
+</mat-card>
+
+<style>
+  .supervisor-dashboard-card {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+  }
+
+  .full-width-input {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  /* Estilos para los colores de estado (actualizados para incluir Aprobada y Devuelta) */
+  .status-pendiente { color: orange; font-weight: bold; }
+  .status-en-proceso { color: blue; font-weight: bold; }
+  .status-completada { color: green; font-weight: bold; }
+  .status-rechazada { color: red; font-weight: bold; }
+  .status-aprobada { color: #4CAF50; font-weight: bold; } /* Otro verde para aprobado */
+  .status-devuelta { color: #FFC107; font-weight: bold; } /* Amarillo para devuelta */
+</style>

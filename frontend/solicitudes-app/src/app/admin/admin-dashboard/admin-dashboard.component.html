@@ -1,0 +1,135 @@
+<div class="dashboard-container">
+  <h1>Panel de Administrador</h1>
+
+  <!-- Sección de Métricas -->
+  <div class="metrics-container">
+    <mat-card *ngFor="let metric of metrics" class="metric-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon *ngIf="metric.icon">{{ metric.icon }}</mat-icon>
+          {{ metric.title }}
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="metric-value">{{ metric.value }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Botón para Crear Nueva Solicitud -->
+  <div class="actions-bar">
+    <button mat-raised-button color="primary" (click)="createNewRequest()">
+      <mat-icon>add_circle_outline</mat-icon> Crear Nueva Solicitud
+    </button>
+  </div>
+
+  <!-- Opcional: Filtros (descomentar y adaptar si se implementan) -->
+  <mat-card class="filters-card">
+    <mat-card-title>Filtros</mat-card-title>
+    <mat-card-content fxLayout="row wrap" fxLayoutGap="20px" class="filters-content">
+      <mat-form-field appearance="outline">
+        <mat-label>Departamento</mat-label>
+        <mat-select [(ngModel)]="filterValues.department">
+          <mat-option value="">Todos</mat-option>
+          <mat-option *ngFor="let dept of availableDepartments" [value]="dept">{{ dept }}</mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Estado</mat-label>
+        <mat-select [(ngModel)]="filterValues.status">
+          <mat-option value="">Todos</mat-option>
+          <mat-option *ngFor="let stat of availableStatuses" [value]="stat">{{ stat }}</mat-option>
+          </mat-select>
+      </mat-form-field>
+      <div class="filter-buttons">
+        <button mat-stroked-button color="primary" (click)="aplicarFiltros()" matTooltip="Aplicar filtros seleccionados">
+            <mat-icon>filter_list</mat-icon> Aplicar
+        </button>
+        <button mat-button (click)="limpiarFiltros()" matTooltip="Limpiar todos los filtros">
+            <mat-icon>clear_all</mat-icon> Limpiar
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Tabla de Solicitudes -->
+  <div *ngIf="allRequests$ | async as requests; else loadingRequests">
+    <div *ngIf="requests.length > 0; else noRequests">
+      <mat-card class="requests-table-card">
+        <mat-card-title>Listado de Todas las Solicitudes</mat-card-title>
+        <table mat-table [dataSource]="requests" class="mat-elevation-z2 requests-table">
+
+          <!-- Columna ID -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> ID </th>
+            <td mat-cell *matCellDef="let request"> {{request.id}} </td>
+          </ng-container>
+
+          <!-- Columna Título -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef> Título </th>
+            <td mat-cell *matCellDef="let request"> {{request.title}} </td>
+          </ng-container>
+
+          <!-- Columna Departamento -->
+          <ng-container matColumnDef="department">
+            <th mat-header-cell *matHeaderCellDef> Departamento </th>
+            <td mat-cell *matCellDef="let request"> {{request.department}} </td>
+          </ng-container>
+
+          <!-- Columna Estado -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> Estado </th>
+            <td mat-cell *matCellDef="let request"> {{request.status}} </td> <!-- Podríamos añadir un badge de color aquí -->
+          </ng-container>
+
+          <!-- Columna Prioridad -->
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef> Prioridad </th>
+            <td mat-cell *matCellDef="let request"> {{request.priority}} </td>
+          </ng-container>
+
+          <!-- Columna Solicitante ID -->
+          <ng-container matColumnDef="requesterId">
+            <th mat-header-cell *matHeaderCellDef> Solicitante </th>
+            <td mat-cell *matCellDef="let request"> {{request.requesterId}} </td>
+          </ng-container>
+
+          <!-- Columna Fecha de Creación -->
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef> Fecha Creación </th>
+            <td mat-cell *matCellDef="let request"> {{request.createdAt | date:'dd/MM/yyyy HH:mm'}} </td>
+          </ng-container>
+
+          <!-- Columna Acciones -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Acciones </th>
+            <td mat-cell *matCellDef="let request">
+              <button mat-icon-button color="primary" (click)="viewRequestDetails(request.id)" matTooltip="Ver/Editar Detalles">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <!-- Aquí se podría añadir un botón para eliminar directamente si se desea -->
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </mat-card>
+    </div>
+  </div>
+
+  <ng-template #loadingRequests>
+    <p>Cargando solicitudes...</p> <!-- Podríamos usar un MatSpinner aquí -->
+  </ng-template>
+
+  <ng-template #noRequests>
+    <mat-card class="info-card">
+      <mat-card-content>
+        <p>No hay solicitudes para mostrar en este momento.</p>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+
+</div>

@@ -1,22 +1,31 @@
+// src/app/solicitudes/solicitudes.routes.ts
 import { Routes } from '@angular/router';
-import { SolicitudesDashboardComponent } from './pages/solicitudes-dashboard/solicitudes-dashboard.component';
-// Importa otros componentes si tienes más sub-rutas, ej: SolicitudCreateComponent, SolicitudDetailComponent
+
+// Componentes a crear en los siguientes pasos
+// import { MisSolicitudesComponent } from './pages/mis-solicitudes/mis-solicitudes.component'; // Para el listado del empleado
+// import { CrearSolicitudComponent } from './pages/crear-solicitud/crear-solicitud.component'; // Para el formulario
+// import { DetalleSolicitudComponent } from './pages/detalle-solicitud/detalle-solicitud.component'; // Para el detalle
 
 export const SOLICITUDES_ROUTES: Routes = [
   {
-    path: '', // Ruta base para '/solicitudes'
-    component: SolicitudesDashboardComponent,
-    // title: 'Gestión de Solicitudes' // Opcional: para el título del navegador
+    path: '', // Ruta base: /solicitudes -> Mis Solicitudes
+    loadComponent: () => import('./pages/mis-solicitudes/mis-solicitudes.component').then(c => c.MisSolicitudesComponent),
+    title: 'Mis Solicitudes'
   },
-  // Ejemplo de sub-rutas:
+  {
+    path: 'crear', // /solicitudes/crear -> Formulario de nueva solicitud
+    loadComponent: () => import('./pages/crear-solicitud/crear-solicitud.component').then(c => c.CrearSolicitudComponent),
+    title: 'Nueva Solicitud'
+  },
+  {
+    path: ':id', // /solicitudes/:id -> Detalle de una solicitud específica
+    loadComponent: () => import('./pages/detalle-solicitud/detalle-solicitud.component').then(c => c.DetalleSolicitudComponent),
+    title: 'Detalle de Solicitud'
+  },
+  // Puedes añadir rutas para editar solicitudes si lo necesitas, por ejemplo:
   // {
-  //   path: 'nueva',
-  //   loadComponent: () => import('./pages/solicitud-create/solicitud-create.component').then(c => c.SolicitudCreateComponent),
-  //   title: 'Nueva Solicitud'
-  // },
-  // {
-  //   path: ':id',
-  //   loadComponent: () => import('./pages/solicitud-detail/solicitud-detail.component').then(c => c.SolicitudDetailComponent),
-  //   title: 'Detalle de Solicitud'
+  //   path: ':id/editar',
+  //   loadComponent: () => import('./pages/editar-solicitud/editar-solicitud.component').then(c => c.EditarSolicitudComponent),
+  //   title: 'Editar Solicitud'
   // }
 ];

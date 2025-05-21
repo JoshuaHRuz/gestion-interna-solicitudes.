@@ -1,0 +1,63 @@
+<div class="detalle-solicitud-container" *ngIf="solicitud">
+  <div class="header-detalle">
+    <h1>Detalle de Solicitud #{{ solicitud.id }}</h1>
+    <button class="btn btn-secondary" (click)="goBack()">Volver a Mis Solicitudes</button>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>{{ solicitud.asunto }}</h2>
+      <span [ngClass]="{
+          'estado-pendiente': solicitud.estado === 'Pendiente',
+          'estado-aprobada': solicitud.estado === 'Aprobada',
+          'estado-rechazada': solicitud.estado === 'Rechazada',
+          'estado-devuelta': solicitud.estado === 'Devuelta'
+        }">
+        Estado: {{ solicitud.estado }}
+      </span>
+    </div>
+    <div class="card-body">
+      <p><strong>Tipo:</strong> {{ solicitud.tipo }}</p>
+      <p><strong>Fecha de Creación:</strong> {{ solicitud.fechaCreacion | date:'mediumDate' }}</p>
+      <p *ngIf="solicitud.fechaMaxima"><strong>Fecha Máxima:</strong> {{ solicitud.fechaMaxima | date:'mediumDate' }}</p>
+      <p><strong>Descripción:</strong> {{ solicitud.descripcion }}</p>
+      <p *ngIf="solicitud.urgente"><strong>Urgente:</strong> Sí</p>
+      <p *ngIf="!solicitud.urgente"><strong>Urgente:</strong> No</p>
+    </div>
+  </div>
+
+  <div class="card historial-aprobacion">
+    <div class="card-header">
+      <h3>Historial de Aprobación</h3>
+    </div>
+    <div class="card-body">
+      <div *ngIf="solicitud.historialAprobacion && solicitud.historialAprobacion.length > 0; else noHistorial">
+        <div *ngFor="let paso of solicitud.historialAprobacion" class="historial-paso">
+          <p><strong>Etapa:</strong> {{ paso.etapa }}</p>
+          <p><strong>Responsable:</strong> {{ paso.responsable }}</p>
+          <p><strong>Fecha de Acción:</strong> {{ paso.fechaAccion | date:'medium' }}</p>
+          <p><strong>Estado:</strong>
+            <span [ngClass]="{
+                'estado-aprobado': paso.estado === 'Aprobado',
+                'estado-rechazado': paso.estado === 'Rechazado',
+                'estado-devuelto': paso.estado === 'Devuelto',
+                'estado-pendiente': paso.estado === 'Pendiente'
+              }">
+              {{ paso.estado }}
+            </span>
+          </p>
+          <p *ngIf="paso.comentarios"><strong>Comentarios:</strong> {{ paso.comentarios }}</p>
+          <hr>
+        </div>
+      </div>
+      <ng-template #noHistorial>
+        <p class="text-muted">No hay historial de aprobación disponible.</p>
+      </ng-template>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="!solicitud" class="loading-message">
+  <p>Cargando detalle de la solicitud o la solicitud no existe...</p>
+</div>

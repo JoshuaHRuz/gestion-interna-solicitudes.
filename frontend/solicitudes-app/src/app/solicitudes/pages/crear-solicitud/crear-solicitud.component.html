@@ -1,0 +1,51 @@
+<div class="crear-solicitud-container">
+  <h1>Crear Nueva Solicitud</h1>
+
+  <form [formGroup]="solicitudForm" (ngSubmit)="onSubmit()">
+
+    <div class="form-group">
+      <label for="tipo">Tipo de Solicitud:</label>
+      <select id="tipo" formControlName="tipo" class="form-control">
+        <option value="" disabled>Selecciona un tipo</option>
+        <option *ngFor="let tipo of tiposSolicitud" [value]="tipo.id">{{ tipo.nombre }}</option>
+      </select>
+      <div *ngIf="solicitudForm.get('tipo')?.invalid && solicitudForm.get('tipo')?.touched" class="error-message">
+        El tipo de solicitud es requerido.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="asunto">Asunto:</label>
+      <input type="text" id="asunto" formControlName="asunto" class="form-control">
+      <div *ngIf="solicitudForm.get('asunto')?.invalid && solicitudForm.get('asunto')?.touched" class="error-message">
+        <span *ngIf="solicitudForm.get('asunto')?.errors?.['required']">El asunto es requerido.</span>
+        <span *ngIf="solicitudForm.get('asunto')?.errors?.['minlength']">Mínimo 5 caracteres.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="descripcion">Descripción:</label>
+      <textarea id="descripcion" formControlName="descripcion" rows="5" class="form-control"></textarea>
+      <div *ngIf="solicitudForm.get('descripcion')?.invalid && solicitudForm.get('descripcion')?.touched" class="error-message">
+        <span *ngIf="solicitudForm.get('descripcion')?.errors?.['required']">La descripción es requerida.</span>
+        <span *ngIf="solicitudForm.get('descripcion')?.errors?.['minlength']">Mínimo 20 caracteres.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="fechaMaxima">Fecha Máxima (opcional):</label>
+      <input type="date" id="fechaMaxima" formControlName="fechaMaxima" class="form-control">
+    </div>
+
+    <div class="form-group checkbox-group">
+      <input type="checkbox" id="urgente" formControlName="urgente">
+      <label for="urgente">Urgente</label>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="solicitudForm.invalid">Enviar Solicitud</button>
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
+    </div>
+
+  </form>
+</div>

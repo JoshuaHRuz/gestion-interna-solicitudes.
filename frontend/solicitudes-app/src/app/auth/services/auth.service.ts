@@ -1,120 +1,110 @@
-// src/app/auth/services/auth.service.ts
-import { Injectable, signal } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable, of, throwError, timer } from 'rxjs';
-import { delay, switchMap, tap } from 'rxjs/operators';
-import { UserCredentials, RegistrationData, AuthResponse } from '../models/auth.models';
+// src/app/services/auth.service.ts (o la ruta donde tengas tu AuthService)
 
-const FAKE_TOKEN = 'fake-jwt-token-for-frontend-dev';
-const USER_DATA_KEY = 'currentUserData';
+import { Injectable, inject } from '@angular/core';
+import { Observable, of, throwError, BehaviorSubject } from 'rxjs';
+import { delay, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
+export type UserRole = 'EMPLEADO' | 'SUPERVISOR' | 'ADMINISTRADOR';
+
+export interface AuthUser {
+  email: string;
+  role: UserRole;
+  area?: string;
+  // Otros datos del usuario si son necesarios
+}
+
+// Nueva interfaz para las credenciales de login (si no la tienes ya)
+export interface LoginCredentials {
+  email: string;
+  password?: string; // Hago password opcional si no lo voy a usar en la simulación
+}
+
+// Nueva interfaz para datos de registro (si no la tienes ya)
+export interface RegistrationData extends LoginCredentials {
+  email: string;
+  // Otros campos de registro como area, nombre, etc.
+}
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  // Usamos signal para el estado reactivo del usuario actual
-  currentUser = signal<AuthResponse | null>(this.loadUserFromStorage());
+  private _currentUserSubject = new BehaviorSubject<AuthUser | null>(null);
+  public currentUser$ = this._currentUserSubject.asObservable(); // Observable para suscribirse en componentes
+  private router = inject(Router);
 
-  constructor(private router: Router) {}
-
-  private loadUserFromStorage(): AuthResponse | null {
-    if (typeof localStorage !== 'undefined') {
-      const data = localStorage.getItem(USER_DATA_KEY);
-      return data ? JSON.parse(data) : null;
+  constructor() {
+    const storedUser = localStorage.getItem('current_user');
+    if (storedUser) {
+      this._currentUserSubject = JSON.parse(storedUser);
     }
-    return null;
   }
 
-  private saveUserToStorage(userData: AuthResponse): void {
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
-      localStorage.setItem('authToken', userData.token); // Guardar token por separado si se prefiere
-    }
-    this.currentUser.set(userData);
-  }
+  // MODIFICACIÓN 1: El método login ahora acepta un objeto LoginCredentials
+  login(credentials: LoginCredentials): Observable<any> {
+    const { email, password } = credentials; // Desestructuro para usar username y password
 
-  private removeUserFromStorage(): void {
-    if (typeof localStorage !== 'undefined') {
-      localStorage.removeItem(USER_DATA_KEY);
-      localStorage.removeItem('authToken');
-    }
-    this.currentUser.set(null);
-  }
-
-  getToken(): string | null {
-    if (typeof localStorage !== 'undefined') {
-      return localStorage.getItem('authToken');
-    }
-    return null;
-  }
-
-  isAuthenticated(): boolean {
-    return !!this.getToken(); // O basado en this.currentUser() !== null
-  }
-
-  login(credentials: UserCredentials): Observable<AuthResponse> {
-    console.log('AuthService: Intentando login con', credentials);
-    // --- SIMULACIÓN DE LLAMADA HTTP ---
-    return timer(1000).pipe( // Simula delay de red
-      switchMap(() => {
-        if (credentials.email === 'test@example.com' && credentials.password === 'password123') {
-          const mockResponse: AuthResponse = {
-            token: FAKE_TOKEN,
-            userId: '1',
-            username: 'TestUser',
-            email: credentials.email,
-            roles: ['ROLE_EMPLEADO']
-          };
-          this.saveUserToStorage(mockResponse);
-          console.log('AuthService: Login exitoso simulado', mockResponse);
-          return of(mockResponse);
-        } else {
-          console.error('AuthService: Credenciales inválidas simuladas');
-          return throwError(() => new Error('Credenciales inválidas (simulado)'));
-        }
+    // Simulación de login con roles
+    return of({
+      token: 'fake-jwt-token-123',
+      user: this.getSimulatedUserByUsername(email)
+    }).pipe(
+      delay(1000),
+      tap(response => {
+        localStorage.setItem('auth_token', response.token);
+        this._currentUserSubject.next(response.user); // Emitir el nuevo usuario a los suscriptores
+        localStorage.setItem('current_user', JSON.stringify(response.user));
       })
     );
-    // --- FIN SIMULACIÓN ---
-
-    // --- CUANDO TENGA BACKEND (ejemplo): ---
-    // return this.http.post<AuthResponse>('/api/auth/login', credentials).pipe(
-    //   tap(response => {
-    //     this.saveUserToStorage(response);
-    //     console.log('AuthService: Login exitoso desde backend', response);
-    //   })
-    // );
   }
 
-  register(data: RegistrationData): Observable<any> { // 'any' podría ser un MessageResponse
-    console.log('AuthService: Intentando registrar', data);
-    // --- SIMULACIÓN DE LLAMADA HTTP ---
-    return timer(1000).pipe(
-      switchMap(() => {
-        if (data.email === 'exists@example.com') {
-          console.error('AuthService: Email ya existe (simulado)');
-          return throwError(() => new Error('Este correo electrónico ya está registrado (simulado).'));
-        }
-        // Simula un registro exitoso
-        const mockMessage = { message: 'Usuario registrado exitosamente (simulado)!' };
-        console.log('AuthService: Registro exitoso simulado');
-        return of(mockMessage);
-      })
-    );
-    // --- FIN SIMULACIÓN ---
+  // MODIFICACIÓN 2: Añado el método register
+  register(registrationData: RegistrationData): Observable<any> {
+      console.log('Simulando registro de usuario:', registrationData);
+      // Aquí en un proyecto real harías una petición HTTP a tu backend
+      // return this.http.post<any>(`${this.apiUrl}/register`, registrationData);
 
-    // --- CUANDO TENGA BACKEND (ejemplo): ---
-    // return this.http.post('/api/auth/register', data);
+      // Simulación de registro exitoso
+      return of({ message: 'Registro exitoso!', user: { username: registrationData.email, role: 'EMPLEADO' } }).pipe(
+          delay(1500), // Simulo un pequeño retraso
+          tap(res => console.log('Registro simulado completo', res))
+      );
+  }
+
+  private getSimulatedUserByUsername(username: string): AuthUser {
+    switch (username.toLowerCase()) {
+      case 'empleado':
+        return { email: 'Empleado', role: 'EMPLEADO' };
+      case 'supervisor':
+        return { email: 'Supervisor', role: 'SUPERVISOR', area: 'IT' }; // Supervisor de IT
+      case 'admin':
+        return { email: 'Admin', role: 'ADMINISTRADOR' };
+      default:
+        return { email: username, role: 'EMPLEADO' }; // Por defecto, si no coincide
+    }
   }
 
   logout(): void {
-    console.log('AuthService: Cerrando sesión');
-    this.removeUserFromStorage();
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('current_user');
+    this._currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }
 
-  // Helper para obtener el rol (ejemplo)
-  hasRole(role: string): boolean {
-    const user = this.currentUser();
-    return user ? user.roles.includes(role) : false;
+  isAuthenticated(): boolean {
+    // Puedes basarte en el token o en el valor actual del BehaviorSubject
+    return !!localStorage.getItem('auth_token') && !!this._currentUserSubject.getValue();
+  }
+
+  // MODIFICACIÓN 2: Un método getter para obtener el valor actual del usuario si es necesario síncronamente
+  // Aunque para templates es mejor usar el observable con el pipe async
+  getCurrentUser(): AuthUser | null {
+    return this._currentUserSubject.getValue();
+  }
+
+  hasRole(role: UserRole): boolean {
+    return this._currentUserSubject.getValue()?.role === role;
   }
 }

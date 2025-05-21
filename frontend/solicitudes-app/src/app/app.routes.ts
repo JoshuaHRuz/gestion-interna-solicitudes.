@@ -41,13 +41,25 @@ export const routes: Routes = [
     canActivate: [authGuard],
     data: { roles: ['SUPERVISOR', 'ADMINISTRADOR'] } // Solo supervisores/admins pueden ver el detalle
   },
-  // {
+  // { // Esto es un ejemplo que ya tenías, lo reemplazaré con las nuevas rutas de admin
   //   path: 'admin', // <-- FUTURA RUTA PARA ADMINISTRADORES
   //   loadChildren: () => import('./admin/admin.routes').then(r => r.ADMIN_ROUTES),
   //   canActivate: [roleGuard],
   //   data: { roles: ['ADMINISTRADOR'] as UserRole[] }
   // },
-
+  {
+    path: 'admin',
+    loadComponent: () => import('./admin/admin-dashboard/admin-dashboard.component').then(c => c.AdminDashboardComponent),
+    canActivate: [roleGuard],
+    data: { roles: ['ADMINISTRADOR'] as UserRole[] }
+  },
+  {
+    path: 'admin/solicitud/:id',
+    loadComponent: () => import('./admin/admin-request-detail/admin-request-detail.component').then(c => c.AdminRequestDetailComponent),
+    canActivate: [roleGuard],
+    data: { roles: ['ADMINISTRADOR'] as UserRole[] }
+  },
+  // Considera añadir una ruta para 'admin/solicitud/nueva' si es necesario
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }
 ];

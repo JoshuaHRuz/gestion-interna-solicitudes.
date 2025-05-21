@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600) // Permitir CORS globalmente para este controlador (ajustar en producción)
+// @CrossOrigin(origins = "*", maxAge = 3600) // ELIMINADO - Se maneja globalmente
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

@@ -1,0 +1,145 @@
+<mat-card class="request-detail-card">
+  <mat-card-header>
+    <mat-card-title>Detalles de la Solicitud</mat-card-title>
+    <mat-card-subtitle *ngIf="request">ID: {{ request.id }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="isLoading" class="loading-spinner">
+      <mat-spinner diameter="30"></mat-spinner> Cargando...
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message mat-error">
+      <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+      <button mat-icon-button (click)="errorMessage = null"><mat-icon>close</mat-icon></button>
+    </div>
+
+    <div *ngIf="successMessage" class="success-message">
+      <mat-icon>check_circle_outline</mat-icon> {{ successMessage }}
+      <button mat-icon-button (click)="successMessage = null"><mat-icon>close</mat-icon></button>
+    </div>
+
+    <div *ngIf="request && !isLoading">
+      <p><strong>Título:</strong> {{ request.title }}</p>
+      <p><strong>Descripción:</strong> {{ request.description }}</p>
+      <p><strong>Departamento:</strong> {{ request.department }}</p>
+      <p><strong>Estado:</strong>
+        <span [ngClass]="{
+          'status-pendiente': request.status === 'Pendiente',
+          'status-en-proceso': request.status === 'En Proceso',
+          'status-rechazada': request.status === 'Rechazada',
+          'status-devuelta': request.status === 'Devuelta',
+          'status-completada': request.status === 'Completada'
+        }">
+          {{ request.status }}
+        </span>
+      </p>
+      <p><strong>Prioridad:</strong> {{ request.priority }}</p>
+      <p><strong>Solicitante:</strong> {{ request.requesterId }}</p>
+      <p><strong>Fecha de Creación:</strong> {{ request.createdAt | date:'short' }}</p>
+      <p *ngIf="request.updatedAt"><strong>Última Actualización:</strong> {{ request.updatedAt | date:'short' }}</p>
+      <p *ngIf="request.comments"><strong>Comentarios del Supervisor:</strong> {{ request.comments }}</p>
+
+
+
+      <form #requestForm="ngForm" (ngSubmit)="updateRequest()" class="update-section">
+        <h3>Actualizar Estado y Comentarios</h3>
+
+        <mat-form-field appearance="fill" class="full-width-input">
+          <mat-label>Estado</mat-label>
+          <mat-select [(ngModel)]="selectedStatus" name="status" required>
+            <mat-option *ngFor="let status of statusOptions" [value]="status">
+              {{ status }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="!selectedStatus && requestForm.submitted">El estado es obligatorio.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width-input">
+          <mat-label>Comentarios</mat-label>
+          <textarea matInput [(ngModel)]="comments" name="comments" rows="3" required #commentsField="ngModel"></textarea>
+          <mat-error *ngIf="commentsField.invalid && (commentsField.dirty || commentsField.touched || requestForm.submitted)">
+            El comentario es obligatorio para actualizar.
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="isLoading || requestForm.invalid">
+          <mat-icon>save</mat-icon> Guardar Cambios
+        </button>
+      </form>
+    </div>
+
+    <div *ngIf="!request && !isLoading && !errorMessage" class="no-request-found">
+      <p>No se pudo cargar la solicitud o no tienes permiso para verla.</p>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon> Volver al Dashboard
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+<style>
+  .request-detail-card {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+  }
+  .loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    color: #555;
+  }
+  .loading-spinner mat-spinner {
+    margin-right: 10px;
+  }
+  .error-message, .success-message {
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .error-message {
+    background-color: #ffe0e0; /* Red claro */
+    color: #d32f2f; /* Rojo oscuro */
+    border: 1px solid #d32f2f;
+  }
+  .success-message {
+    background-color: #e8f5e9; /* Verde claro */
+    color: #388e3c; /* Verde oscuro */
+    border: 1px solid #388e3c;
+  }
+  .error-message mat-icon, .success-message mat-icon {
+    margin-right: 10px;
+  }
+  .full-width-input {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  .update-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+  }
+  .update-section h3 {
+    margin-bottom: 15px;
+  }
+  .no-request-found {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+  }
+
+  /* Clases de estado (añadidas en requests.service y supervisor-dashboard) */
+  .status-pendiente { color: orange; font-weight: bold; }
+  .status-en-proceso { color: blue; font-weight: bold; }
+  .status-completada { color: green; font-weight: bold; }
+  .status-rechazada { color: red; font-weight: bold; }
+  .status-aprobada { color: #4CAF50; font-weight: bold; } /* Otro verde para aprobado */
+  .status-devuelta { color: #FFC107; font-weight: bold; } /* Amarillo para devuelta */
+</style>

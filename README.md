@@ -1,4 +1,4 @@
-```markdown
+
 # Guía de Inicio Rápido: Ejecutar el Proyecto Localmente
 
 ¡Hola! Esta guía te ayudará a poner en marcha la aplicación Angular de este proyecto en tu máquina local. Sigue estos sencillos pasos para clonar el repositorio, instalar las dependencias y ejecutar la aplicación.

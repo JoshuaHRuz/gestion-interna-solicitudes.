@@ -23,7 +23,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+<<<<<<< HEAD
 // @CrossOrigin(origins = "*", maxAge = 3600) // ELIMINADO - Se maneja globalmente via CorsConfig
+=======
+// @CrossOrigin(origins = "*", maxAge = 3600) // ELIMINADO - Se maneja globalmente
+>>>>>>> origin/main
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

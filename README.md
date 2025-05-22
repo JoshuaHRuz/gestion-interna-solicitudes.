@@ -100,4 +100,39 @@ npm install
 
 ---
 ¡Eso es todo! Ahora deberías tener la aplicación Angular funcionando correctamente en tu entorno local.
-```
+
+## Usuarios Iniciales para Pruebas
+
+A continuación, se muestran los usuarios disponibles para pruebas en el sistema. Cada uno tiene asignado un rol y, si aplica, un departamento. Puedes usarlos para verificar permisos y funcionalidades.
+
+### Usuarios Principales
+
+- **Administrador**
+  - **Email**: `admin@example.com`
+  - **Contraseña**: `admin123`
+  - **Rol**: `ADMINISTRADOR`
+
+- **Supervisor de IT**
+  - **Email**: `supervisor.it@example.com`
+  - **Contraseña**: `supIT123`
+  - **Rol**: `SUPERVISOR`
+  - **Departamento**: `IT`
+
+- **Empleado de IT**
+  - **Email**: `empleado.it@example.com`
+  - **Contraseña**: `empIT123`
+  - **Rol**: `EMPLEADO`
+  - **Departamento**: `IT`
+
+### Usuarios Adicionales (contraseña común: `123456`)
+
+| Correo Electrónico                      | Contraseña | Rol        | Departamento     |
+|----------------------------------------|------------|------------|------------------|
+| supervisor.rrhh@example.com            | 123456     | SUPERVISOR | RRHH             |
+| supervisor.finanzas@example.com        | 123456     | SUPERVISOR | Finanzas         |
+| empleado.rrhh@example.com              | 123456     | EMPLEADO   | RRHH             |
+| empleado.finanzas@example.com          | 123456     | EMPLEADO   | Finanzas         |
+| supervisor.ventas@example.com          | 123456     | SUPERVISOR | Ventas           |
+| supervisor.admin@example.com           | 123456     | SUPERVISOR | Administración   |
+| supervisor.operaciones@example.com     | 123456     | SUPERVISOR | Operaciones      |
+

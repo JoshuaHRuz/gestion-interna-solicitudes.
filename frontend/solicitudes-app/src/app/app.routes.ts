@@ -15,8 +15,9 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./dashboard/dashboard.component').then(c => c.DashboardComponent),
-    canActivate: [authGuard] // Todos los usuarios autenticados pueden ver el dashboard genérico
+    loadChildren: () => import('./solicitudes/solicitudes.routes').then(r => r.SOLICITUDES_ROUTES),
+    canActivate: [roleGuard], // Todos los usuarios autenticados pueden ver el dashboard genérico
+    data: { roles: ['EMPLEADO', 'SUPERVISOR', 'ADMINISTRADOR'] as UserRole[] }
   },
   {
     path: 'solicitudes', // Rutas de empleado (Mis Solicitudes, Crear, Detalle)

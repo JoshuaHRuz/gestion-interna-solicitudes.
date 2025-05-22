@@ -32,7 +32,7 @@ Primero, descarga una copia del código del proyecto a tu computadora desde GitH
 Abre tu terminal (o línea de comandos) y ejecuta el siguiente comando:
 
 ```bash
-git clone https://github.com/JoshuaHRuz/gestion-interna-solicitudes.git
+git clone https://github.com/JoshuaHRuz/gestion-interna-solicitudes.
 ```
 
 Esto creará una nueva carpeta llamada `gestion-interna-solicitudes` en el directorio donde ejecutaste el comando.

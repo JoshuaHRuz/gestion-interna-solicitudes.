@@ -42,7 +42,7 @@ Esto creará una nueva carpeta llamada `gestion-interna-solicitudes` en el direc
 Este proyecto tiene una estructura que separa el frontend (Angular) del backend. La parte de Angular se encuentra en una subcarpeta específica, y debemos movernos allí para trabajar con ella.
 
 ```bash
-cd gestion-interna-solicitudes/frontend/solicitudes-app
+cd gestion-interna-solicitudes./frontend/solicitudes-app
 ```
 
 Ahora, tu terminal estará dentro del directorio principal de la aplicación Angular.
